@@ -1,0 +1,150 @@
+{
+  "SchemaVersion": 1,
+  "Commands": [
+    {
+      "Name": "Disk - Free space on C:",
+      "Description": "Read only. Shows free space in GB; useful before and after cleanup.",
+      "Command": "(Get-CimInstance Win32_LogicalDisk -Filter \"DeviceID='C:'\").FreeSpace / 1GB"
+    },
+    {
+      "Name": "Disk - Largest folders on C:",
+      "Description": "Read only, but potentially slow. Inaccessible files are omitted from size estimates.",
+      "Command": "Get-ChildItem C:\\ -Directory | ForEach-Object { [PSCustomObject]@{ Folder=$_.FullName; GB=[math]::Round(((Get-ChildItem $_.FullName -Recurse -Force -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum / 1GB), 2) } } | Sort-Object GB -Descending"
+    },
+    {
+      "Name": "Cleanup - Windows temporary files",
+      "Description": "Deletes contents of the Windows Temp folder, not the folder itself. Locked or inaccessible items are reported.",
+      "Command": "$tempFolder = Join-Path $env:windir 'Temp'\nGet-ChildItem -LiteralPath $tempFolder -Force -ErrorAction Stop | ForEach-Object { Remove-Item -LiteralPath $_.FullName -Recurse -Force -ErrorAction Continue }"
+    },
+    {
+      "Name": "Cleanup - Crash dump files",
+      "Description": "Deletes MEMORY.DMP and files in Minidump. This removes evidence needed for crash investigations.",
+      "Command": "$dumpFile = Join-Path $env:SystemRoot 'MEMORY.DMP'\n$miniDumpFolder = Join-Path $env:SystemRoot 'Minidump'\nif (Test-Path -LiteralPath $dumpFile) { Remove-Item -LiteralPath $dumpFile -Force -ErrorAction Continue }\nif (Test-Path -LiteralPath $miniDumpFolder) { Get-ChildItem -LiteralPath $miniDumpFolder -File -Force -ErrorAction Stop | ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force -ErrorAction Continue } }"
+    },
+    {
+      "Name": "Cleanup - Windows.old",
+      "Description": "Destructive. Removes the previous Windows installation and rollback files. Changes ownership and permissions first; review before running.",
+      "Command": "if (Test-Path -LiteralPath 'C:\\Windows.old') {\n    takeown /F 'C:\\Windows.old' /R /A /D Y\n    if ($LASTEXITCODE -ne 0) { throw 'Taking ownership of Windows.old failed.' }\n    icacls 'C:\\Windows.old' /grant 'Administrators:F' /T /C\n    if ($LASTEXITCODE -ne 0) { throw 'Changing permissions on Windows.old failed.' }\n    Remove-Item -LiteralPath 'C:\\Windows.old' -Recurse -Force -ErrorAction Stop\n}"
+    },
+    {
+      "Name": "Profiles - Preview profiles to remove (edit first)",
+      "Description": "Read only. Replace REPLACE_WITH_PROFILE_FOLDER with the primary user's profile folder name. Special and loaded profiles are excluded. Review this list before using the removal command.",
+      "Command": "$keepProfileFolder = 'REPLACE_WITH_PROFILE_FOLDER'\nif ($keepProfileFolder -eq 'REPLACE_WITH_PROFILE_FOLDER' -or [string]::IsNullOrWhiteSpace($keepProfileFolder)) { throw 'Set keepProfileFolder to the primary user profile folder name first.' }\n$profiles = @(Get-CimInstance Win32_UserProfile -ErrorAction Stop)\nif (-not @($profiles | Where-Object { (Split-Path $_.LocalPath -Leaf) -eq $keepProfileFolder }).Count) { throw 'The profile folder to retain was not found. Enter its folder name, not a full path or UPN.' }\n$profiles | Where-Object { -not $_.Special -and -not $_.Loaded -and (Split-Path $_.LocalPath -Leaf) -notin @($keepProfileFolder,'Public','Default') } | Select-Object LocalPath,SID"
+    },
+    {
+      "Name": "Profiles - Remove unused profiles (edit first)",
+      "Description": "Destructive: deletes profile data. Replace REPLACE_WITH_PROFILE_FOLDER with the primary user's profile folder name and run the matching preview first. Special and loaded profiles are excluded.",
+      "Command": "$keepProfileFolder = 'REPLACE_WITH_PROFILE_FOLDER'\nif ($keepProfileFolder -eq 'REPLACE_WITH_PROFILE_FOLDER' -or [string]::IsNullOrWhiteSpace($keepProfileFolder)) { throw 'Set keepProfileFolder to the primary user profile folder name first and review the profile preview.' }\n$profiles = @(Get-CimInstance Win32_UserProfile -ErrorAction Stop)\nif (-not @($profiles | Where-Object { (Split-Path $_.LocalPath -Leaf) -eq $keepProfileFolder }).Count) { throw 'The profile folder to retain was not found. Enter its folder name, not a full path or UPN.' }\n$profiles | Where-Object { -not $_.Special -and -not $_.Loaded -and (Split-Path $_.LocalPath -Leaf) -notin @($keepProfileFolder,'Public','Default') } | Remove-CimInstance -ErrorAction Continue"
+    },
+    {
+      "Name": "Cleanup - User temporary files",
+      "Description": "Deletes Temp contents under each profile in C:\\Users. Locked or inaccessible items are reported.",
+      "Command": "Get-ChildItem -LiteralPath 'C:\\Users' -Directory -ErrorAction Stop | ForEach-Object {\n    $tempFolder = Join-Path $_.FullName 'AppData\\Local\\Temp'\n    if (Test-Path -LiteralPath $tempFolder) { Get-ChildItem -LiteralPath $tempFolder -Force -ErrorAction Continue | ForEach-Object { Remove-Item -LiteralPath $_.FullName -Recurse -Force -ErrorAction Continue } }\n}"
+    },
+    {
+      "Name": "Cleanup - Windows Update download cache",
+      "Description": "Disruptive. Stops Windows Update and BITS, clears downloaded updates, and restores each service's original running/stopped state. Do not use during an active update.",
+      "Command": "$services = @(Get-Service -Name wuauserv,bits -ErrorAction Stop)\n$runningServices = @($services | Where-Object Status -eq 'Running' | Select-Object -ExpandProperty Name)\ntry {\n    $services | Stop-Service -Force -ErrorAction Stop\n    $downloadFolder = Join-Path $env:windir 'SoftwareDistribution\\Download'\n    Get-ChildItem -LiteralPath $downloadFolder -Force -ErrorAction Stop | ForEach-Object { Remove-Item -LiteralPath $_.FullName -Recurse -Force -ErrorAction Continue }\n}\nfinally {\n    foreach ($serviceName in $runningServices) { Start-Service -Name $serviceName -ErrorAction Continue }\n}"
+    },
+    {
+      "Name": "Servicing - Analyze component store",
+      "Description": "Read only. DISM analyzes component-store usage; this may take several minutes.",
+      "Command": "DISM /Online /Cleanup-Image /AnalyzeComponentStore\nif ($LASTEXITCODE -notin @(0,3010)) { throw \"DISM failed with exit code $LASTEXITCODE.\" }"
+    },
+    {
+      "Name": "Servicing - Standard component cleanup",
+      "Description": "Changes the component store. Runs standard DISM cleanup; this may take several minutes.",
+      "Command": "DISM /Online /Cleanup-Image /StartComponentCleanup\nif ($LASTEXITCODE -notin @(0,3010)) { throw \"DISM failed with exit code $LASTEXITCODE.\" }"
+    },
+    {
+      "Name": "Servicing - Aggressive component cleanup (ResetBase)",
+      "Description": "Irreversible. ResetBase prevents uninstalling existing update packages afterward. Use only after reviewing the impact.",
+      "Command": "DISM /Online /Cleanup-Image /StartComponentCleanup /ResetBase\nif ($LASTEXITCODE -notin @(0,3010)) { throw \"DISM failed with exit code $LASTEXITCODE.\" }"
+    },
+    {
+      "Name": "System - Windows version and build",
+      "Description": "Read only. Shows product name, display version, build and revision.",
+      "Command": "$cv = Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion'\n\"{0} {1} (Build {2}.{3})\" -f $cv.ProductName,$cv.DisplayVersion,$cv.CurrentBuild,$cv.UBR"
+    },
+    {
+      "Name": "System - Uptime",
+      "Description": "Read only. Shows elapsed time since the last Windows boot.",
+      "Command": "$u=(Get-Date)-(Get-CimInstance Win32_OperatingSystem).LastBootUpTime\n\"{0} days, {1} hours, {2} minutes\" -f $u.Days,$u.Hours,$u.Minutes"
+    },
+    {
+      "Name": "Upgrade - Remove failed upgrade staging files",
+      "Description": "Destructive. Removes C:\\$WINDOWS.~BT after a failed or cancelled upgrade, including setup diagnostics. Do not run during an active upgrade; review before retrying setup.",
+      "Command": "if (Test-Path -LiteralPath 'C:\\$WINDOWS.~BT') {\n    takeown /F 'C:\\$WINDOWS.~BT' /R /A /D Y\n    if ($LASTEXITCODE -ne 0) { throw 'Taking ownership of upgrade staging files failed.' }\n    icacls 'C:\\$WINDOWS.~BT' /grant 'Administrators:F' /T /C\n    if ($LASTEXITCODE -ne 0) { throw 'Changing permissions on upgrade staging files failed.' }\n    Remove-Item -LiteralPath 'C:\\$WINDOWS.~BT' -Recurse -Force -ErrorAction Stop\n}"
+    },
+    {
+      "Name": "Repair - Scan and repair Windows system files",
+      "Description": "Runs SFC /scannow, which can repair protected system files. May take several minutes; review SFC output.",
+      "Command": "sfc /scannow"
+    },
+    {
+      "Name": "Intune - Start the PushLaunch scheduled task",
+      "Description": "Starts the existing PushLaunch task on the endpoint. Task start does not prove a completed Intune sync.",
+      "Command": "Get-ScheduledTask -TaskName 'PushLaunch' -ErrorAction Stop | Start-ScheduledTask -ErrorAction Stop"
+    },
+    {
+      "Name": "Reboot - Pending reboot check",
+      "Description": "Read only. Returns True if common servicing, Windows Update or file-rename reboot flags are present.",
+      "Command": "(Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending') -or (Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired') -or ((Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager' -ErrorAction SilentlyContinue).PendingFileRenameOperations -ne $null)"
+    },
+    {
+      "Name": "Reboot - Reasons a reboot is pending",
+      "Description": "Read only. Lists common pending-reboot reasons; no output means none of these flags were found.",
+      "Command": "@(\nif (Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending') { 'CBS Reboot Pending' }\nif (Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired') { 'Windows Update Reboot Required' }\nif ((Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager' -ErrorAction SilentlyContinue).PendingFileRenameOperations) { 'Pending File Rename Operations' }\n) -join '; '"
+    },
+    {
+      "Name": "Reboot - Detailed reboot status",
+      "Description": "Read only. Shows common pending-reboot flags separately.",
+      "Command": "[PSCustomObject]@{\n    CBSRebootPending = Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending'\n    WURebootRequired = Test-Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired'\n    PendingFileRenames = $null -ne (Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager' -ErrorAction SilentlyContinue).PendingFileRenameOperations\n} | Format-List *"
+    },
+    {
+      "Name": "Reboot - Pending file renames",
+      "Description": "Read only. Lists pending file rename operations from Session Manager.",
+      "Command": "(Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager' -ErrorAction Stop).PendingFileRenameOperations"
+    },
+    {
+      "Name": "Servicing - Pending CBS registry keys",
+      "Description": "Read only. Lists servicing registry keys containing Pending or Reboot.",
+      "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing' |\nWhere-Object { $_.PSChildName -match 'Pending|Reboot' } |\nSelect-Object PSChildName"
+    },
+    {
+      "Name": "Updates - Recently installed hotfixes",
+      "Description": "Read only. Lists hotfix IDs and installation dates, newest first.",
+      "Command": "Get-HotFix | Select-Object HotFixID,InstalledOn | Sort-Object InstalledOn -Descending"
+    },
+    {
+      "Name": "Updates - Recent Windows Update errors",
+      "Description": "Read only. Filters errors from the most recent 100 Windows Update operational events.",
+      "Command": "Get-WinEvent -LogName 'Microsoft-Windows-WindowsUpdateClient/Operational' -MaxEvents 100 |\nWhere-Object { $_.Level -eq 2 } |\nSelect-Object TimeCreated,Id,Message"
+    },
+    {
+      "Name": "Updates - Recent update and servicing activity",
+      "Description": "Read only. Filters Windows Update and servicing entries from the most recent 100 System events.",
+      "Command": "Get-WinEvent -LogName System -MaxEvents 100 |\nWhere-Object { $_.ProviderName -match 'WindowsUpdate|Servicing' } |\nSelect-Object TimeCreated,ProviderName,Id,Message"
+    },
+    {
+      "Name": "Servicing - Pending CBS packages",
+      "Description": "Read only. Shows PackagesPending registry properties. A missing key is reported as an error.",
+      "Command": "Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\PackagesPending' -ErrorAction Stop | Format-List *"
+    },
+    {
+      "Name": "Reboot - Windows Update reboot registry key",
+      "Description": "Read only. Shows the Windows Update RebootRequired key. A missing key is reported as an error.",
+      "Command": "Get-Item 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired' -ErrorAction Stop"
+    },
+    {
+      "Name": "Installer - Recent MSI activity",
+      "Description": "Read only. Filters MSI installer entries from the most recent 100 Application events.",
+      "Command": "Get-WinEvent -LogName Application -MaxEvents 100 |\nWhere-Object { $_.ProviderName -eq 'MsiInstaller' } |\nSelect-Object TimeCreated,Id,Message"
+    },
+    {
+      "Name": "Disk - Upgrade artifact sizes",
+      "Description": "Read only, but potentially slow. Estimates sizes of root items whose names start with $. Inaccessible files are omitted.",
+      "Command": "Get-ChildItem C:\\ -Force | Where-Object Name -like '$*' | Select-Object Name,@{N='GB';E={\"{0:N2}\" -f ((Get-ChildItem $_.FullName -Recurse -Force -File -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum/1GB)}}"
+    }
+  ]
+}
