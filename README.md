@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/endpoint-toolbox.png" alt="Endpoint Toolbox logo" width="160">
+  <img src="Desktop/endpoint-toolbox-nobkg.png" alt="Endpoint Toolbox logo" width="160">
 </p>
 
 # Endpoint Toolbox
