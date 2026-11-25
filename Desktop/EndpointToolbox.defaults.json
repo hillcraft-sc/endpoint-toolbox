@@ -1,0 +1,22 @@
+{
+  "SchemaVersion": 2,
+  "Appearance": {
+    "Theme": "Light"
+  },
+  "Graph": {
+    "TenantId": ""
+  },
+  "Remote": {
+    "DnsSuffix": ""
+  },
+  "CloudUpdate": {
+    "GroupNames": []
+  },
+  "WUfB": {
+    "WorkspaceId": "",
+    "AzureTenantId": ""
+  },
+  "Reports": {
+    "Folder": "%TEMP%\\endpoint-toolbox"
+  }
+}

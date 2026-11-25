@@ -1,0 +1,44 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Script output: reports, exports and logs
+*.csv
+*.log
+*.tmp
+*.xlsx
+*.xls
+
+# Local per-user settings and secrets
+settings.json
+recent-devices.json
+remote-settings.json
+*.local.json
+.env
+.env.*
+*.pfx
+*.key
+
+# Test runs
+TestResults/
+testResults.xml
+*.nupkg
+
+# Build output
+bin/
+obj/
+
+# Internal development notes (not published)
+Desktop/plan.md
+Desktop/prompt.md
+
+# AI-assistant agent and instruction files (not published)
+.github/agents/
+.github/instructions/

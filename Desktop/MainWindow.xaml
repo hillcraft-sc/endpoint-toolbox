@@ -1,0 +1,812 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Endpoint Toolbox" Width="1400" Height="940" MinWidth="1000" MinHeight="700"
+        WindowStartupLocation="CenterScreen" Background="{DynamicResource Brush.Background.Primary}"
+        FontFamily="{DynamicResource Font.Family.UI}" FontSize="{DynamicResource Font.Size.Body}" Foreground="{DynamicResource Brush.Text.Primary}" UseLayoutRounding="True">
+  <Window.Resources>
+    <sys:Double x:Key="Control.Height.Default">32</sys:Double>
+    <sys:Double x:Key="Icon.Size.Default">16</sys:Double>
+    <sys:Double x:Key="Icon.Size.Small">12</sys:Double>
+    <sys:Double x:Key="Control.Height.Multiline">56</sys:Double>
+    <sys:Double x:Key="Control.Height.Multiline.Maximum">120</sys:Double>
+    <sys:Double x:Key="Control.Height.DataGrid.Row">34</sys:Double>
+    <sys:Double x:Key="Control.Height.DataGrid.Header">38</sys:Double>
+    <sys:Double x:Key="Control.Height.Progress">3</sys:Double>
+    <sys:Double x:Key="Control.Height.ChartBar">8</sys:Double>
+    <sys:Double x:Key="Control.Height.Divider">1</sys:Double>
+    <sys:Double x:Key="Control.Height.SelectionGrid">300</sys:Double>
+    <sys:Double x:Key="Control.Height.RecentOutput.Minimum">120</sys:Double>
+    <sys:Double x:Key="Control.Height.RecentOutput.Maximum">180</sys:Double>
+    <sys:Double x:Key="Font.Size.Caption">11</sys:Double>
+    <sys:Double x:Key="Font.Size.Secondary">12</sys:Double>
+    <sys:Double x:Key="Font.Size.Console">13</sys:Double>
+    <sys:Double x:Key="Font.Size.Body">14</sys:Double>
+    <sys:Double x:Key="Font.Size.Subheading">16</sys:Double>
+    <sys:Double x:Key="Font.Size.Heading">20</sys:Double>
+    <sys:Double x:Key="Font.Size.Title">24</sys:Double>
+    <FontFamily x:Key="Font.Family.UI">Segoe UI</FontFamily>
+    <FontFamily x:Key="Font.Family.Monospace">Cascadia Mono, Consolas</FontFamily>
+    <Thickness x:Key="BorderThickness.Default">1</Thickness>
+    <Thickness x:Key="BorderThickness.Focus">2</Thickness>
+    <Thickness x:Key="Padding.Button.Default">12,5</Thickness>
+    <Thickness x:Key="Padding.Button.Compact">10,6</Thickness>
+    <Thickness x:Key="Padding.Control">8,4</Thickness>
+    <Thickness x:Key="Padding.Console">8</Thickness>
+    <Thickness x:Key="Padding.Tab">12,6</Thickness>
+    <Thickness x:Key="Padding.Section">14</Thickness>
+    <Thickness x:Key="Padding.Badge">10,5</Thickness>
+    <Thickness x:Key="Spacing.Button.Margin">0,0,8,0</Thickness>
+    <Thickness x:Key="Spacing.Label.Margin">0,0,0,6</Thickness>
+    <Thickness x:Key="Spacing.Field.Margin">0,0,0,12</Thickness>
+    <Thickness x:Key="Spacing.Hint.Margin">0,6,0,0</Thickness>
+    <Thickness x:Key="Spacing.Panel.Margin">0,0,0,12</Thickness>
+    <Thickness x:Key="Spacing.Dialog.Margin">16</Thickness>
+    <Thickness x:Key="Spacing.CheckBox.Margin">0,6,0,6</Thickness>
+    <Thickness x:Key="Spacing.Expander.Margin">0,8,0,12</Thickness>
+    <Thickness x:Key="Spacing.TabItem.Margin">0,0,8,2</Thickness>
+    <Thickness x:Key="Spacing.Section.Description.Margin">0,0,0,16</Thickness>
+    <Thickness x:Key="Spacing.Section.Header.Margin">0,0,0,10</Thickness>
+    <Thickness x:Key="Spacing.Browse.Margin">0,8,0,0</Thickness>
+    <Thickness x:Key="Spacing.Advanced.Margin">12,12,0,0</Thickness>
+    <Thickness x:Key="Padding.ExecutionMode">16,10</Thickness>
+    <Thickness x:Key="Spacing.ExecutionMode.Header.Margin">0,0,0,3</Thickness>
+    <Thickness x:Key="Spacing.ExecutionMode.Control.Margin">0,3,0,0</Thickness>
+    <Thickness x:Key="Spacing.Notes.Margin">0,10,0,10</Thickness>
+    <Thickness x:Key="Spacing.Dialog.Heading.Margin">0,0,0,8</Thickness>
+    <Thickness x:Key="Spacing.Dialog.Grid.Margin">0,14,0,14</Thickness>
+    <Thickness x:Key="Spacing.Dialog.Username.Margin">0,12,0,4</Thickness>
+    <Thickness x:Key="Spacing.Dialog.Password.Margin">0,10,0,4</Thickness>
+    <Thickness x:Key="Spacing.Dialog.Text.Margin">0,12,0,0</Thickness>
+    <Thickness x:Key="Spacing.Dialog.Buttons.Margin">0,14,0,0</Thickness>
+    <CornerRadius x:Key="CornerRadius.Default">6</CornerRadius>
+    <CornerRadius x:Key="CornerRadius.Large">8</CornerRadius>
+    <!-- Theme brushes are replaced as a palette; controls resolve them through DynamicResource. -->
+    <Color x:Key="Color.Accent">#006FC9</Color>
+    <Color x:Key="Color.Chart.Success">#18794E</Color>
+    <Color x:Key="Color.Chart.Failure">#BA2525</Color>
+    <Color x:Key="Color.Chart.Warning">#9C5200</Color>
+    <Color x:Key="Color.Chart.Pending">#006FC9</Color>
+    <Color x:Key="Color.Chart.Neutral">#61758E</Color>
+    <Color x:Key="Color.Chart.Accent1">#713CB8</Color>
+    <Color x:Key="Color.Chart.Accent2">#007B82</Color>
+    <Color x:Key="Color.Chart.Accent3">#A33980</Color>
+    <Color x:Key="Color.Chart.Accent4">#6C7100</Color>
+    <Color x:Key="Color.Background.Primary">#F5F7FB</Color>
+    <Color x:Key="Color.Background.Secondary">#EEF2F7</Color>
+    <Color x:Key="Color.Background.Elevated">#FFFFFF</Color>
+    <Color x:Key="Color.Text.Primary">#172B4D</Color>
+    <Color x:Key="Color.Text.Button">#243B53</Color>
+    <Color x:Key="Color.Text.Secondary">#526780</Color>
+    <Color x:Key="Color.Text.Muted">#61758E</Color>
+    <Color x:Key="Color.Text.Category">#465D78</Color>
+    <Color x:Key="Color.Text.Summary">#526579</Color>
+    <Color x:Key="Color.Text.Selected">#005AAB</Color>
+    <Color x:Key="Color.Text.Error">#8B0000</Color>
+    <Color x:Key="Color.Text.OnAccent">#FFFFFF</Color>
+    <Color x:Key="Color.Border.Default">#CDD7E4</Color>
+    <Color x:Key="Color.Border.Input">#7A8696</Color>
+    <Color x:Key="Color.Border.Subtle">#E1E7EF</Color>
+    <Color x:Key="Color.Border.Divider">#DBE3ED</Color>
+    <Color x:Key="Color.Border.Gridline">#EEF2F7</Color>
+    <Color x:Key="Color.Border.Selection">#B8DBFA</Color>
+    <Color x:Key="Color.Selection">#D8EAFB</Color>
+    <Color x:Key="Color.Selection.Hover">#E0EAF5</Color>
+    <Color x:Key="Color.Focus">#006FC9</Color>
+    <Color x:Key="Color.Information">#EAF3FD</Color>
+    <Color x:Key="Color.Information.Text">#285781</Color>
+    <Color x:Key="Color.Success">#E5F2ED</Color>
+    <Color x:Key="Color.Warning">#FFF3D6</Color>
+    <Color x:Key="Color.Error">#FDE9E7</Color>
+    <Color x:Key="Color.Console.Background">#142238</Color>
+    <Color x:Key="Color.Console.Text">#E6EDF7</Color>
+    <Color x:Key="Color.Tab.Focus">#E7F1FC</Color>
+    <Color x:Key="Color.Grid.Alternate">#F8FAFD</Color>
+    <ResourceDictionary x:Key="Theme.DarkPalette">
+      <Color x:Key="Color.Accent">#68B5FF</Color>
+      <Color x:Key="Color.Chart.Success">#75D79F</Color>
+      <Color x:Key="Color.Chart.Failure">#FF9B95</Color>
+      <Color x:Key="Color.Chart.Warning">#FFC47A</Color>
+      <Color x:Key="Color.Chart.Pending">#68B5FF</Color>
+      <Color x:Key="Color.Chart.Neutral">#B8B8B8</Color>
+      <Color x:Key="Color.Chart.Accent1">#C6A0FF</Color>
+      <Color x:Key="Color.Chart.Accent2">#65D1D8</Color>
+      <Color x:Key="Color.Chart.Accent3">#F8A8D9</Color>
+      <Color x:Key="Color.Chart.Accent4">#E3D66B</Color>
+      <Color x:Key="Color.Background.Primary">#1E1E1E</Color>
+      <Color x:Key="Color.Background.Secondary">#252526</Color>
+      <Color x:Key="Color.Background.Elevated">#2D2D30</Color>
+      <Color x:Key="Color.Text.Primary">#F0F0F0</Color>
+      <Color x:Key="Color.Text.Button">#F0F0F0</Color>
+      <Color x:Key="Color.Text.Secondary">#C5C5C5</Color>
+      <Color x:Key="Color.Text.Muted">#B8B8B8</Color>
+      <Color x:Key="Color.Text.Category">#C5C5C5</Color>
+      <Color x:Key="Color.Text.Summary">#C5C5C5</Color>
+      <Color x:Key="Color.Text.Selected">#B9DEFF</Color>
+      <Color x:Key="Color.Text.Error">#FFB4AB</Color>
+      <Color x:Key="Color.Text.OnAccent">#102030</Color>
+      <Color x:Key="Color.Border.Default">#777777</Color>
+      <Color x:Key="Color.Border.Input">#929292</Color>
+      <Color x:Key="Color.Border.Subtle">#505050</Color>
+      <Color x:Key="Color.Border.Divider">#505050</Color>
+      <Color x:Key="Color.Border.Gridline">#404040</Color>
+      <Color x:Key="Color.Border.Selection">#426B91</Color>
+      <Color x:Key="Color.Selection">#264F70</Color>
+      <Color x:Key="Color.Selection.Hover">#373F48</Color>
+      <Color x:Key="Color.Focus">#80C4FF</Color>
+      <Color x:Key="Color.Information">#243C50</Color>
+      <Color x:Key="Color.Information.Text">#C4E4FF</Color>
+      <Color x:Key="Color.Success">#23483C</Color>
+      <Color x:Key="Color.Warning">#57451F</Color>
+      <Color x:Key="Color.Error">#592F32</Color>
+      <Color x:Key="Color.Console.Background">#151515</Color>
+      <Color x:Key="Color.Console.Text">#E6EDF7</Color>
+      <Color x:Key="Color.Tab.Focus">#303E4C</Color>
+      <Color x:Key="Color.Grid.Alternate">#27272A</Color>
+    </ResourceDictionary>
+    <ResourceDictionary x:Key="Theme.CatppuccinMochaPalette">
+      <Color x:Key="Color.Accent">#CBA6F7</Color>
+      <Color x:Key="Color.Chart.Success">#A6E3A1</Color>
+      <Color x:Key="Color.Chart.Failure">#F38BA8</Color>
+      <Color x:Key="Color.Chart.Warning">#FAB387</Color>
+      <Color x:Key="Color.Chart.Pending">#CBA6F7</Color>
+      <Color x:Key="Color.Chart.Neutral">#A6ADC8</Color>
+      <Color x:Key="Color.Chart.Accent1">#89B4FA</Color>
+      <Color x:Key="Color.Chart.Accent2">#94E2D5</Color>
+      <Color x:Key="Color.Chart.Accent3">#F5C2E7</Color>
+      <Color x:Key="Color.Chart.Accent4">#F9E2AF</Color>
+      <Color x:Key="Color.Background.Primary">#1E1E2E</Color>
+      <Color x:Key="Color.Background.Secondary">#181825</Color>
+      <Color x:Key="Color.Background.Elevated">#313244</Color>
+      <Color x:Key="Color.Text.Primary">#CDD6F4</Color>
+      <Color x:Key="Color.Text.Button">#CDD6F4</Color>
+      <Color x:Key="Color.Text.Secondary">#BAC2DE</Color>
+      <Color x:Key="Color.Text.Muted">#A6ADC8</Color>
+      <Color x:Key="Color.Text.Category">#BAC2DE</Color>
+      <Color x:Key="Color.Text.Summary">#BAC2DE</Color>
+      <Color x:Key="Color.Text.Selected">#CDD6F4</Color>
+      <Color x:Key="Color.Text.Error">#F38BA8</Color>
+      <Color x:Key="Color.Text.OnAccent">#1E1E2E</Color>
+      <Color x:Key="Color.Border.Default">#7F849C</Color>
+      <Color x:Key="Color.Border.Input">#9399B2</Color>
+      <Color x:Key="Color.Border.Subtle">#585B70</Color>
+      <Color x:Key="Color.Border.Divider">#585B70</Color>
+      <Color x:Key="Color.Border.Gridline">#45475A</Color>
+      <Color x:Key="Color.Border.Selection">#89B4FA</Color>
+      <Color x:Key="Color.Selection">#45475A</Color>
+      <Color x:Key="Color.Selection.Hover">#3B3D52</Color>
+      <Color x:Key="Color.Focus">#CBA6F7</Color>
+      <Color x:Key="Color.Information">#2D3C52</Color>
+      <Color x:Key="Color.Information.Text">#B4BEFE</Color>
+      <Color x:Key="Color.Success">#2D403A</Color>
+      <Color x:Key="Color.Warning">#493B2D</Color>
+      <Color x:Key="Color.Error">#4A3039</Color>
+      <Color x:Key="Color.Console.Background">#11111B</Color>
+      <Color x:Key="Color.Console.Text">#CDD6F4</Color>
+      <Color x:Key="Color.Tab.Focus">#45475A</Color>
+      <Color x:Key="Color.Grid.Alternate">#292A3B</Color>
+    </ResourceDictionary>
+    <ResourceDictionary x:Key="Theme.GruvboxDarkPalette">
+      <Color x:Key="Color.Accent">#FABD2F</Color>
+      <Color x:Key="Color.Chart.Success">#B8BB26</Color>
+      <Color x:Key="Color.Chart.Failure">#FB4934</Color>
+      <Color x:Key="Color.Chart.Warning">#FABD2F</Color>
+      <Color x:Key="Color.Chart.Pending">#8EC07C</Color>
+      <Color x:Key="Color.Chart.Neutral">#BDAE93</Color>
+      <Color x:Key="Color.Chart.Accent1">#83A598</Color>
+      <Color x:Key="Color.Chart.Accent2">#D3869B</Color>
+      <Color x:Key="Color.Chart.Accent3">#FE8019</Color>
+      <Color x:Key="Color.Chart.Accent4">#D5C4A1</Color>
+      <Color x:Key="Color.Background.Primary">#282828</Color>
+      <Color x:Key="Color.Background.Secondary">#1D2021</Color>
+      <Color x:Key="Color.Background.Elevated">#3C3836</Color>
+      <Color x:Key="Color.Text.Primary">#EBDBB2</Color>
+      <Color x:Key="Color.Text.Button">#EBDBB2</Color>
+      <Color x:Key="Color.Text.Secondary">#D5C4A1</Color>
+      <Color x:Key="Color.Text.Muted">#BDAE93</Color>
+      <Color x:Key="Color.Text.Category">#D5C4A1</Color>
+      <Color x:Key="Color.Text.Summary">#D5C4A1</Color>
+      <Color x:Key="Color.Text.Selected">#FBF1C7</Color>
+      <Color x:Key="Color.Text.Error">#FE8019</Color>
+      <Color x:Key="Color.Text.OnAccent">#282828</Color>
+      <Color x:Key="Color.Border.Default">#928374</Color>
+      <Color x:Key="Color.Border.Input">#BDAE93</Color>
+      <Color x:Key="Color.Border.Subtle">#665C54</Color>
+      <Color x:Key="Color.Border.Divider">#665C54</Color>
+      <Color x:Key="Color.Border.Gridline">#504945</Color>
+      <Color x:Key="Color.Border.Selection">#83A598</Color>
+      <Color x:Key="Color.Selection">#504945</Color>
+      <Color x:Key="Color.Selection.Hover">#45403C</Color>
+      <Color x:Key="Color.Focus">#FABD2F</Color>
+      <Color x:Key="Color.Information">#3D4540</Color>
+      <Color x:Key="Color.Information.Text">#D5C4A1</Color>
+      <Color x:Key="Color.Success">#39432F</Color>
+      <Color x:Key="Color.Warning">#4A3B2B</Color>
+      <Color x:Key="Color.Error">#4C3030</Color>
+      <Color x:Key="Color.Console.Background">#1D2021</Color>
+      <Color x:Key="Color.Console.Text">#EBDBB2</Color>
+      <Color x:Key="Color.Tab.Focus">#504945</Color>
+      <Color x:Key="Color.Grid.Alternate">#32302F</Color>
+    </ResourceDictionary>
+    <SolidColorBrush x:Key="Brush.Accent" Color="#006FC9"/>
+    <SolidColorBrush x:Key="Brush.Chart.Success" Color="{StaticResource Color.Chart.Success}"/>
+    <SolidColorBrush x:Key="Brush.Chart.Failure" Color="{StaticResource Color.Chart.Failure}"/>
+    <SolidColorBrush x:Key="Brush.Chart.Warning" Color="{StaticResource Color.Chart.Warning}"/>
+    <SolidColorBrush x:Key="Brush.Chart.Pending" Color="{StaticResource Color.Chart.Pending}"/>
+    <SolidColorBrush x:Key="Brush.Chart.Neutral" Color="{StaticResource Color.Chart.Neutral}"/>
+    <SolidColorBrush x:Key="Brush.Chart.Accent1" Color="{StaticResource Color.Chart.Accent1}"/>
+    <SolidColorBrush x:Key="Brush.Chart.Accent2" Color="{StaticResource Color.Chart.Accent2}"/>
+    <SolidColorBrush x:Key="Brush.Chart.Accent3" Color="{StaticResource Color.Chart.Accent3}"/>
+    <SolidColorBrush x:Key="Brush.Chart.Accent4" Color="{StaticResource Color.Chart.Accent4}"/>
+    <SolidColorBrush x:Key="Brush.Background.Primary" Color="#F5F7FB"/>
+    <SolidColorBrush x:Key="Brush.Background.Secondary" Color="#EEF2F7"/>
+    <SolidColorBrush x:Key="Brush.Background.Elevated" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.Text.Primary" Color="#172B4D"/>
+    <SolidColorBrush x:Key="Brush.Text.Button" Color="#243B53"/>
+    <SolidColorBrush x:Key="Brush.Text.Secondary" Color="#526780"/>
+    <SolidColorBrush x:Key="Brush.Text.Muted" Color="#61758E"/>
+    <SolidColorBrush x:Key="Brush.Text.Category" Color="#465D78"/>
+    <SolidColorBrush x:Key="Brush.Text.Summary" Color="#526579"/>
+    <SolidColorBrush x:Key="Brush.Text.Selected" Color="#005AAB"/>
+    <SolidColorBrush x:Key="Brush.Text.Error" Color="#8B0000"/>
+    <SolidColorBrush x:Key="Brush.Text.OnAccent" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Brush.Border.Default" Color="#CDD7E4"/>
+    <SolidColorBrush x:Key="Brush.Border.Input" Color="#7A8696"/>
+    <SolidColorBrush x:Key="Brush.Border.Subtle" Color="#E1E7EF"/>
+    <SolidColorBrush x:Key="Brush.Border.Divider" Color="#DBE3ED"/>
+    <SolidColorBrush x:Key="Brush.Border.Gridline" Color="#EEF2F7"/>
+    <SolidColorBrush x:Key="Brush.Border.Selection" Color="#B8DBFA"/>
+    <SolidColorBrush x:Key="Brush.Selection" Color="#D8EAFB"/>
+    <SolidColorBrush x:Key="Brush.Selection.Hover" Color="#E0EAF5"/>
+    <SolidColorBrush x:Key="Brush.Focus" Color="#006FC9"/>
+    <SolidColorBrush x:Key="Brush.Information" Color="#EAF3FD"/>
+    <SolidColorBrush x:Key="Brush.Information.Text" Color="#285781"/>
+    <SolidColorBrush x:Key="Brush.Success" Color="#E5F2ED"/>
+    <SolidColorBrush x:Key="Brush.Warning" Color="#FFF3D6"/>
+    <SolidColorBrush x:Key="Brush.Error" Color="#FDE9E7"/>
+    <SolidColorBrush x:Key="Brush.Console.Background" Color="#142238"/>
+    <SolidColorBrush x:Key="Brush.Console.Text" Color="#E6EDF7"/>
+    <SolidColorBrush x:Key="Brush.Tab.Focus" Color="#E7F1FC"/>
+    <SolidColorBrush x:Key="Brush.Grid.Alternate" Color="#F8FAFD"/>
+    <Style TargetType="Button">
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/><Setter Property="Foreground" Value="{DynamicResource Brush.Text.Button}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Default}"/><Setter Property="BorderThickness" Value="{StaticResource BorderThickness.Default}"/>
+      <Setter Property="Padding" Value="{StaticResource Padding.Button.Default}"/><Setter Property="Margin" Value="{StaticResource Spacing.Button.Margin}"/>
+      <Setter Property="MinHeight" Value="{StaticResource Control.Height.Default}"/><Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value><ControlTemplate TargetType="Button">
+          <Border x:Name="Chrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{StaticResource CornerRadius.Default}" Padding="{TemplateBinding Padding}">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Opacity" Value="0.8"/></Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource Brush.Focus}"/><Setter TargetName="Chrome" Property="BorderThickness" Value="{StaticResource BorderThickness.Focus}"/></Trigger>
+            <Trigger Property="IsEnabled" Value="False"><Setter TargetName="Chrome" Property="Opacity" Value="0.4"/></Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate></Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/><Setter Property="Foreground" Value="{DynamicResource Brush.Text.OnAccent}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/><Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="MinWidth" Value="165"/>
+    </Style>
+    <Style TargetType="TextBox">
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/><Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Input}"/><Setter Property="Padding" Value="{StaticResource Padding.Control}"/>
+      <Setter Property="BorderThickness" Value="{StaticResource BorderThickness.Default}"/>
+      <Setter Property="MinHeight" Value="{StaticResource Control.Height.Default}"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="SelectionBrush" Value="{DynamicResource Brush.Border.Selection}"/>
+    </Style>
+    <Style TargetType="PasswordBox">
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/><Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Input}"/><Setter Property="Padding" Value="{StaticResource Padding.Control}"/>
+      <Setter Property="BorderThickness" Value="{StaticResource BorderThickness.Default}"/>
+      <Setter Property="MinHeight" Value="{StaticResource Control.Height.Default}"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="MultilineInput" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+      <Setter Property="AcceptsReturn" Value="True"/><Setter Property="MinHeight" Value="{StaticResource Control.Height.Multiline}"/>
+      <Setter Property="MaxHeight" Value="{StaticResource Control.Height.Multiline.Maximum}"/><Setter Property="VerticalContentAlignment" Value="Top"/>
+      <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+    </Style>
+    <Style x:Key="ConsoleOutput" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+      <Setter Property="IsReadOnly" Value="True"/><Setter Property="AcceptsReturn" Value="True"/>
+      <Setter Property="VerticalContentAlignment" Value="Top"/><Setter Property="Padding" Value="{StaticResource Padding.Console}"/>
+      <Setter Property="FontFamily" Value="{StaticResource Font.Family.Monospace}"/><Setter Property="FontSize" Value="{StaticResource Font.Size.Console}"/>
+      <Setter Property="Background" Value="{DynamicResource Brush.Console.Background}"/><Setter Property="Foreground" Value="{DynamicResource Brush.Console.Text}"/>
+      <Setter Property="VerticalScrollBarVisibility" Value="Auto"/><Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+    </Style>
+    <Style TargetType="ComboBox">
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Setter Property="Padding" Value="{StaticResource Padding.Control}"/><Setter Property="MinHeight" Value="{StaticResource Control.Height.Default}"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/><Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Input}"/>
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/>
+      <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ComboBox">
+        <Grid>
+          <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{StaticResource BorderThickness.Default}" CornerRadius="{StaticResource CornerRadius.Default}"/>
+          <Grid Margin="{TemplateBinding Padding}">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <ContentPresenter x:Name="Selection" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" VerticalAlignment="Center" IsHitTestVisible="False"/>
+            <TextBox x:Name="PART_EditableTextBox" Visibility="Hidden" Background="Transparent" BorderThickness="0" Padding="0" MinHeight="0"
+                     Foreground="{TemplateBinding Foreground}" VerticalContentAlignment="Center"
+                     IsReadOnly="{TemplateBinding IsReadOnly}" Focusable="True"/>
+            <TextBlock Grid.Column="1" Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="{StaticResource Icon.Size.Small}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+          </Grid>
+          <ToggleButton x:Name="DropDownToggle" Focusable="False" ClickMode="Press"
+                        IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+            <ToggleButton.Template><ControlTemplate TargetType="ToggleButton"><Border Background="Transparent"/></ControlTemplate></ToggleButton.Template>
+          </ToggleButton>
+          <Popup x:Name="PART_Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False">
+            <Border MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                    Background="{DynamicResource Brush.Background.Elevated}" BorderBrush="{DynamicResource Brush.Border.Default}" BorderThickness="{StaticResource BorderThickness.Default}">
+              <ScrollViewer CanContentScroll="True"><ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/></ScrollViewer>
+            </Border>
+          </Popup>
+        </Grid>
+        <ControlTemplate.Triggers>
+          <Trigger Property="IsEditable" Value="True">
+            <Setter TargetName="Selection" Property="Visibility" Value="Hidden"/>
+            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+            <Setter TargetName="DropDownToggle" Property="HorizontalAlignment" Value="Right"/>
+            <Setter TargetName="DropDownToggle" Property="Width" Value="{StaticResource Control.Height.Default}"/>
+          </Trigger>
+          <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter Property="BorderBrush" Value="{DynamicResource Brush.Focus}"/></Trigger>
+          <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.4"/></Trigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="CheckBox">
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Setter Property="Margin" Value="{StaticResource Spacing.CheckBox.Margin}"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="DataGrid">
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Setter Property="RowBackground" Value="{DynamicResource Brush.Background.Elevated}"/>
+      <Setter Property="IsReadOnly" Value="True"/><Setter Property="AutoGenerateColumns" Value="True"/>
+      <Setter Property="EnableRowVirtualization" Value="True"/><Setter Property="EnableColumnVirtualization" Value="True"/>
+      <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/><Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+      <Setter Property="CanUserAddRows" Value="False"/><Setter Property="RowHeaderWidth" Value="0"/>
+      <Setter Property="GridLinesVisibility" Value="Horizontal"/><Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource Brush.Border.Gridline}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Subtle}"/><Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/>
+      <Setter Property="RowHeight" Value="{StaticResource Control.Height.DataGrid.Row}"/><Setter Property="ColumnHeaderHeight" Value="{StaticResource Control.Height.DataGrid.Header}"/>
+      <Setter Property="AlternatingRowBackground" Value="{DynamicResource Brush.Grid.Alternate}"/>
+    </Style>
+    <Style TargetType="DataGridColumnHeader">
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Secondary}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Default}"/>
+      <Setter Property="Padding" Value="{StaticResource Padding.Control}"/>
+    </Style>
+    <Style TargetType="DataGridCell">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
+      <Style.Triggers>
+        <Trigger Property="IsSelected" Value="True">
+          <Setter Property="Background" Value="{DynamicResource Brush.Selection}"/>
+          <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+          <Setter Property="BorderBrush" Value="{DynamicResource Brush.Focus}"/>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+    <Style TargetType="ListBox">
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Default}"/>
+      <Setter Property="BorderThickness" Value="{StaticResource BorderThickness.Default}"/>
+      <!-- Replaces the Aero2 template, whose disabled state hard-codes a white background. -->
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ListBox">
+        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+          <ScrollViewer x:Name="Scroller" Focusable="False" Padding="{TemplateBinding Padding}">
+            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+          </ScrollViewer>
+        </Border>
+        <ControlTemplate.Triggers>
+          <Trigger Property="IsEnabled" Value="False"><Setter TargetName="Bd" Property="Opacity" Value="0.4"/></Trigger>
+          <MultiTrigger>
+            <MultiTrigger.Conditions>
+              <Condition Property="IsGrouping" Value="True"/>
+              <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="False"/>
+            </MultiTrigger.Conditions>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+          </MultiTrigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="ComboBoxItem">
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Style.Triggers>
+        <Trigger Property="IsHighlighted" Value="True">
+          <Setter Property="Background" Value="{DynamicResource Brush.Selection}"/>
+          <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Selected}"/>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+    <Style TargetType="ToolTip">
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Primary}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Default}"/>
+    </Style>
+    <Style x:Key="ScrollPageButton" TargetType="RepeatButton">
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent"/></ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="ScrollBar">
+      <Setter Property="Background" Value="{DynamicResource Brush.Background.Secondary}"/>
+      <Setter Property="Width" Value="{x:Static SystemParameters.VerticalScrollBarWidth}"/>
+      <Setter Property="MinWidth" Value="0"/><Setter Property="MinHeight" Value="0"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar">
+        <Border Background="{TemplateBinding Background}">
+          <Track x:Name="PART_Track" IsDirectionReversed="True">
+            <Track.DecreaseRepeatButton><RepeatButton x:Name="Decrease" Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollPageButton}"/></Track.DecreaseRepeatButton>
+            <Track.Thumb>
+              <Thumb Background="{DynamicResource Brush.Text.Muted}">
+                <Thumb.Template><ControlTemplate TargetType="Thumb">
+                  <Border Background="{TemplateBinding Background}" Margin="3" CornerRadius="{StaticResource CornerRadius.Default}"/>
+                </ControlTemplate></Thumb.Template>
+              </Thumb>
+            </Track.Thumb>
+            <Track.IncreaseRepeatButton><RepeatButton x:Name="Increase" Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollPageButton}"/></Track.IncreaseRepeatButton>
+          </Track>
+        </Border>
+        <ControlTemplate.Triggers>
+          <Trigger Property="Orientation" Value="Horizontal">
+            <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False"/>
+            <Setter TargetName="Decrease" Property="Command" Value="ScrollBar.PageLeftCommand"/>
+            <Setter TargetName="Increase" Property="Command" Value="ScrollBar.PageRightCommand"/>
+          </Trigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+      <Style.Triggers>
+        <Trigger Property="Orientation" Value="Horizontal">
+          <Setter Property="Width" Value="Auto"/><Setter Property="Height" Value="{x:Static SystemParameters.HorizontalScrollBarHeight}"/>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+    <Style TargetType="TabControl"><Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/></Style>
+    <Style TargetType="TabItem">
+      <Setter Property="Padding" Value="{StaticResource Padding.Tab}"/><Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TabItem">
+        <Border x:Name="TabBorder" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0,0,0,3" Padding="{TemplateBinding Padding}" Margin="{StaticResource Spacing.TabItem.Margin}">
+          <ContentPresenter x:Name="TabHeader" ContentSource="Header" RecognizesAccessKey="True"/>
+        </Border>
+        <ControlTemplate.Triggers>
+          <Trigger Property="IsSelected" Value="True"><Setter TargetName="TabHeader" Property="TextElement.Foreground" Value="{DynamicResource Brush.Accent}"/><Setter TargetName="TabHeader" Property="TextElement.FontWeight" Value="SemiBold"/><Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/></Trigger>
+          <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource Brush.Tab.Focus}"/><Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource Brush.Focus}"/><Setter TargetName="TabBorder" Property="BorderThickness" Value="{StaticResource BorderThickness.Focus}"/></Trigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style x:Key="ExpanderHeaderKeyboardFocus" TargetType="Control">
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Control">
+        <Border BorderBrush="{DynamicResource Brush.Focus}" BorderThickness="{StaticResource BorderThickness.Focus}"/>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="Expander">
+      <Setter Property="Margin" Value="{StaticResource Spacing.Expander.Margin}"/><Setter Property="Padding" Value="{StaticResource Padding.Control}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Secondary}"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Expander">
+        <StackPanel>
+          <ToggleButton x:Name="HeaderToggle" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}"
+                        Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="Left"
+                        FocusVisualStyle="{StaticResource ExpanderHeaderKeyboardFocus}"
+                        IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+            <ToggleButton.Template><ControlTemplate TargetType="ToggleButton">
+              <Border x:Name="HeaderBorder" BorderBrush="Transparent" BorderThickness="{StaticResource BorderThickness.Focus}" Padding="{StaticResource Padding.Control}">
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock x:Name="Chevron" Text="&#xE76C;" FontFamily="Segoe MDL2 Assets" FontSize="{StaticResource Icon.Size.Small}" VerticalAlignment="Center" Margin="{StaticResource Spacing.Button.Margin}"/>
+                  <ContentPresenter RecognizesAccessKey="True"/>
+                </StackPanel>
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsChecked" Value="True"><Setter TargetName="Chevron" Property="Text" Value="&#xE70D;"/></Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate></ToggleButton.Template>
+          </ToggleButton>
+          <ContentPresenter x:Name="ExpandedContent" Visibility="Collapsed" Margin="{TemplateBinding Padding}"/>
+        </StackPanel>
+        <ControlTemplate.Triggers>
+          <Trigger Property="IsExpanded" Value="True"><Setter TargetName="ExpandedContent" Property="Visibility" Value="Visible"/></Trigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+  </Window.Resources>
+  <Grid FocusManager.FocusedElement="{Binding ElementName=Search}">
+    <Grid.ColumnDefinitions><ColumnDefinition Width="246"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+    <Border Background="{DynamicResource Brush.Background.Secondary}" BorderBrush="{DynamicResource Brush.Border.Divider}" BorderThickness="0,0,1,0">
+      <DockPanel Margin="12,18,12,12">
+        <StackPanel DockPanel.Dock="Top">
+          <TextBlock Text="Endpoint Toolbox" FontSize="{StaticResource Font.Size.Heading}" FontWeight="SemiBold" Margin="6,0,0,3"/>
+          <TextBlock Text="Intune · Entra · Remote support" FontSize="{StaticResource Font.Size.Secondary}" Foreground="{DynamicResource Brush.Text.Muted}" Margin="6,0,0,24"/>
+          <TextBlock Text="FIND A TASK" FontSize="{StaticResource Font.Size.Caption}" FontWeight="SemiBold" Foreground="{DynamicResource Brush.Text.Muted}" Margin="6,0,0,7"/>
+          <TextBox Name="Search" ToolTip="Search by task, category or script name" AutomationProperties.Name="Search tasks" Margin="0,0,4,12"
+                   KeyboardNavigation.TabIndex="0"/>
+          <Button Name="HomeButton" Content="_Home / Graph connection" HorizontalAlignment="Stretch" Margin="0,0,4,8" AutomationProperties.Name="Home / Graph connection" KeyboardNavigation.TabIndex="1"/>
+          <TextBlock Name="SearchEmpty" Text="No matching tasks. Try another search." TextWrapping="Wrap" Visibility="Collapsed"
+                     Foreground="{DynamicResource Brush.Text.Secondary}" Margin="6,0,0,8" AutomationProperties.LiveSetting="Polite"/>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,14,0,0">
+          <Border Height="{StaticResource Control.Height.Divider}" Background="{DynamicResource Brush.Border.Divider}" Margin="0,0,0,12"/>
+          <Button Name="SettingsButton" Content="_Settings" ToolTip="Settings (Ctrl+,)" AutomationProperties.Name="Settings"
+                  AutomationProperties.AcceleratorKey="Ctrl+," Margin="0" HorizontalAlignment="Left" KeyboardNavigation.TabIndex="3"/>
+        </StackPanel>
+        <ListBox Name="WorkflowList" BorderThickness="0" Background="Transparent" IsSynchronizedWithCurrentItem="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto" AutomationProperties.Name="Tasks grouped by category"
+                 KeyboardNavigation.TabIndex="2">
+          <ListBox.GroupStyle>
+            <GroupStyle>
+              <GroupStyle.ContainerStyle><Style TargetType="GroupItem">
+                <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="GroupItem">
+                  <Expander Tag="WorkflowCategory" Header="{Binding Name}" Margin="0,2,4,2" Padding="8,0,0,0"
+                            Foreground="{DynamicResource Brush.Text.Primary}" FontWeight="SemiBold">
+                    <ItemsPresenter/>
+                  </Expander>
+                </ControlTemplate></Setter.Value></Setter>
+              </Style></GroupStyle.ContainerStyle>
+            </GroupStyle>
+          </ListBox.GroupStyle>
+          <ListBox.ItemContainerStyle><Style TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Margin" Value="0,2,4,2"/><Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ListBoxItem">
+              <Border x:Name="ItemBorder" Padding="{TemplateBinding Padding}" Background="Transparent" CornerRadius="{StaticResource CornerRadius.Default}" BorderBrush="Transparent" BorderThickness="3,0,0,0">
+                <ContentPresenter/>
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource Brush.Selection.Hover}"/></Trigger>
+                <Trigger Property="IsSelected" Value="True"><Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource Brush.Selection}"/><Setter TargetName="ItemBorder" Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/><Setter Property="Foreground" Value="{DynamicResource Brush.Text.Selected}"/><Setter Property="FontWeight" Value="SemiBold"/></Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="ItemBorder" Property="BorderBrush" Value="{DynamicResource Brush.Focus}"/><Setter TargetName="ItemBorder" Property="BorderThickness" Value="{StaticResource BorderThickness.Focus}"/></Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate></Setter.Value></Setter>
+          </Style></ListBox.ItemContainerStyle>
+          <ListBox.ItemTemplate><DataTemplate>
+            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" ToolTip="{Binding Path}"/>
+          </DataTemplate></ListBox.ItemTemplate>
+        </ListBox>
+      </DockPanel>
+    </Border>
+    <ScrollViewer Name="HomePanel" Grid.Column="1" Margin="{StaticResource Spacing.Dialog.Margin}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel>
+        <TextBlock Text="Microsoft Graph connection" FontSize="{StaticResource Font.Size.Title}" FontWeight="SemiBold" Margin="{StaticResource Spacing.Panel.Margin}"/>
+        <TextBlock Text="Connect once in this app; Graph tasks reuse the same worker session. If the tenant field is empty, Connect uses the default tenant in Settings &gt; Graph, or the account default when that setting is empty. Remote endpoint credentials are separate. No sign-in occurs automatically." TextWrapping="Wrap" Margin="{StaticResource Spacing.Panel.Margin}"/>
+        <TextBlock Name="GraphSessionStatus" Text="Sign-in and permissions not verified." TextWrapping="Wrap" Margin="{StaticResource Spacing.Panel.Margin}"
+                   AutomationProperties.Name="Graph connection and role status" AutomationProperties.LiveSetting="Polite"/>
+        <TextBlock Name="GraphTenantLabel" Text="Tenant ID or domain (optional; overrides Settings)" Margin="{StaticResource Spacing.Label.Margin}"/>
+        <TextBox Name="GraphTenant" AutomationProperties.Name="Tenant ID or domain (optional; overrides Settings)" AutomationProperties.LabeledBy="{Binding ElementName=GraphTenantLabel}" Margin="{StaticResource Spacing.Field.Margin}"/>
+        <WrapPanel Margin="{StaticResource Spacing.Panel.Margin}">
+          <Button Name="GraphConnectButton" Content="_Connect / reconnect" Style="{StaticResource PrimaryButton}"/>
+          <Button Name="GraphCheckButton" Content="Check connectio_n"/>
+          <Button Name="GraphDisconnectButton" Content="_Disconnect Graph"/>
+          <Button Name="GraphStopButton" Content="_Stop" IsEnabled="False"/>
+        </WrapPanel>
+        <Button Name="OpenPimButton" Content="Open Microsoft Entra _PIM" HorizontalAlignment="Left" Margin="{StaticResource Spacing.Panel.Margin}"/>
+        <TextBlock Name="GraphSessionDetails" Text="Check connection makes live Graph requests and shows the account, tenant, delegated scopes and active tenant-wide built-in roles. Results are a point-in-time check, not a continuous monitor." TextWrapping="Wrap" Margin="{StaticResource Spacing.Panel.Margin}"/>
+        <Expander Name="GraphGuidance" Header="Graph permissions and role requirements">
+          <StackPanel>
+        <TextBlock Text="Connect uses the existing Microsoft Graph permissions granted to this account/application; it does not request a new bundle of read, write or role-management scopes. PIM activation and application consent are separate. Activate your role in PIM, then check again; the app never activates roles for you." TextWrapping="Wrap" Margin="{StaticResource Spacing.Panel.Margin}"/>
+        <TextBlock Text="Before every Graph task, the app checks the live connection, required scopes and active roles again. Most reports require Global Reader or Intune Administrator. Both user sign-in views accept Global Reader, Reports Reader, Security Reader, Security Operator or Security Administrator in app preflight; Graph enforces access to the selected API. Intune changes require Intune Administrator. Group-task preflight accepts Groups Administrator or Intune Administrator; this is not proof of permission to modify the target group. Real Entra / Autopilot cleanup requires both Intune Administrator and Cloud Device Administrator. Global Administrator also satisfies these role checks but is not recommended merely to use this app." TextWrapping="Wrap" Margin="{StaticResource Spacing.Panel.Margin}"/>
+        <TextBlock Text="Role eligibility alone is insufficient. Scoped/custom roles and group ownership are not verified. A failed or unreadable check blocks the task before the business script starts. Consent, Intune RBAC, licensing, conditional access, service propagation and role expiry during a run can still cause an operation to fail." TextWrapping="Wrap" Margin="{StaticResource Spacing.Panel.Margin}"/>
+          </StackPanel>
+        </Expander>
+        <Button Name="ReturnToTaskButton" Content="Return to selected _task" HorizontalAlignment="Left"/>
+      </StackPanel>
+    </ScrollViewer>
+    <Grid Name="TaskPanel" Grid.Column="1" Margin="24,18,24,12" Visibility="Collapsed">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <StackPanel Margin="0,0,0,12">
+        <DockPanel>
+          <Border Name="RiskBadge" DockPanel.Dock="Right" Background="{DynamicResource Brush.Success}" CornerRadius="5" Padding="{StaticResource Padding.Badge}" VerticalAlignment="Top" Margin="16,0,0,0">
+            <TextBlock Name="RiskLabel" Text="Read only" FontSize="{StaticResource Font.Size.Secondary}" FontWeight="SemiBold"
+                       AutomationProperties.Name="Workflow risk" AutomationProperties.LiveSetting="Polite"/>
+          </Border>
+          <StackPanel>
+            <TextBlock Name="CategoryLabel" Foreground="{DynamicResource Brush.Accent}" FontSize="{StaticResource Font.Size.Secondary}" FontWeight="SemiBold" Margin="0,0,0,5"/>
+            <TextBlock Name="WorkflowTitle" FontSize="{StaticResource Font.Size.Title}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+          </StackPanel>
+        </DockPanel>
+        <TextBlock Name="Description" Foreground="{DynamicResource Brush.Text.Secondary}" TextWrapping="Wrap" Margin="0,8,0,0" LineHeight="21">
+          <TextBlock.Style><Style TargetType="TextBlock"><Style.Triggers>
+            <MultiDataTrigger>
+              <MultiDataTrigger.Conditions>
+                <Condition Binding="{Binding IsSelected, ElementName=RemoteTab}" Value="True"/>
+                <Condition Binding="{Binding IsSelected, ElementName=OutputTab}" Value="True"/>
+              </MultiDataTrigger.Conditions>
+              <Setter Property="Visibility" Value="Collapsed"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+              <MultiDataTrigger.Conditions>
+                <Condition Binding="{Binding IsSelected, ElementName=ResultsTab}" Value="True"/>
+                <Condition Binding="{Binding IsSelected, ElementName=OutputTab}" Value="True"/>
+              </MultiDataTrigger.Conditions>
+              <Setter Property="Visibility" Value="Collapsed"/>
+            </MultiDataTrigger>
+          </Style.Triggers></Style></TextBlock.Style>
+        </TextBlock>
+      </StackPanel>
+      <TabControl Name="WorkspaceTabs" Grid.Row="1">
+        <TabItem Header="Configure" Name="ConfigureTab">
+          <ScrollViewer Name="FormScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0,4,12,8">
+              <TextBlock Name="WorkflowGuide" Foreground="{DynamicResource Brush.Text.Secondary}" TextWrapping="Wrap" Margin="{StaticResource Spacing.Panel.Margin}"/>
+              <StackPanel Name="Form"/>
+            </StackPanel>
+          </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Results" Name="OutputTab">
+          <Grid Margin="0,4,0,0">
+            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+            <Border Background="{DynamicResource Brush.Information}" CornerRadius="{StaticResource CornerRadius.Default}" Padding="10" Margin="0,0,0,8">
+              <Border.Style><Style TargetType="Border"><Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected, ElementName=RemoteTab}" Value="True"><Setter Property="Visibility" Value="Collapsed"/></DataTrigger>
+              </Style.Triggers></Style></Border.Style>
+              <ScrollViewer MaxHeight="100" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Expander Name="RunTimingExpander" Margin="0" Padding="0" ToolTip="Expand for run timing details">
+                  <Expander.Header>
+                    <TextBlock Name="RunSummary" Text="Run a task to see its output here." TextWrapping="Wrap" Foreground="{DynamicResource Brush.Information.Text}"
+                               AutomationProperties.LiveSetting="Polite"/>
+                  </Expander.Header>
+                  <TextBlock Name="RunTiming" Text="Timing will appear when a task starts." TextWrapping="Wrap" Foreground="{DynamicResource Brush.Text.Summary}" Margin="{StaticResource Spacing.Hint.Margin}"/>
+                </Expander>
+              </ScrollViewer>
+            </Border>
+            <TabControl Grid.Row="1" Name="Tabs">
+              <TabItem Header="Script output" Name="ActivityTab">
+                <DockPanel>
+                  <Button Name="SaveLogButton" Content="Save output..." DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,12,0,0"/>
+                  <TextBox Name="Activity" Style="{StaticResource ConsoleOutput}" AutomationProperties.Name="Live script output"/>
+                </DockPanel>
+              </TabItem>
+              <TabItem Header="Report data" Name="ResultsTab" IsEnabled="False">
+                <DockPanel>
+                  <Grid DockPanel.Dock="Top" Margin="{StaticResource Spacing.Panel.Margin}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="2*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                    <StackPanel><TextBlock Text="Report / dataset" Margin="0,0,0,5"/><ComboBox Name="DatasetSelector" AutomationProperties.Name="Report dataset"/></StackPanel>
+                    <StackPanel Grid.Column="2"><TextBlock Text="Filter rows" Margin="0,0,0,5"/><TextBox Name="ResultFilter" AutomationProperties.Name="Filter report rows"/><TextBlock Name="ResultFilterStatus" MinHeight="16" FontSize="{StaticResource Font.Size.Secondary}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource Brush.Text.Secondary}" AutomationProperties.LiveSetting="Polite"/></StackPanel>
+                    <Button Name="SaveResultsButton" Grid.Column="3" Content="Export view..." VerticalAlignment="Bottom" Margin="12,0,0,0"/>
+                  </Grid>
+                  <WrapPanel DockPanel.Dock="Top" Margin="{StaticResource Spacing.Panel.Margin}">
+                    <StackPanel Name="SignInPagingActions" Orientation="Horizontal" Visibility="Collapsed">
+                      <Button Name="LoadMoreSignIns" Content="_Load more" IsEnabled="False" AutomationProperties.Name="Load more sign-in events"/>
+                      <Button Name="RetrieveAllSignIns" Content="_Retrieve all" IsEnabled="False" AutomationProperties.Name="Retrieve all remaining sign-in events"/>
+                      <TextBlock Name="SignInPagingStatus" VerticalAlignment="Center" TextWrapping="Wrap" Foreground="{DynamicResource Brush.Text.Secondary}" AutomationProperties.LiveSetting="Polite"/>
+                    </StackPanel>
+                    <Button Name="ClearReportCategory" Visibility="Collapsed"/>
+                    <Button Name="OpenSignInDays" Content="View selected device's sign-in days..." Visibility="Collapsed" IsEnabled="False"/>
+                    <Button Name="OpenWUfBUpdates" Content="View selected device's updates" Visibility="Collapsed" IsEnabled="False"
+                            AutomationProperties.Name="View selected device's updates" ToolTip="Select cells in one WUfB device row. Uses already retrieved data; no new query."/>
+                    <Button Name="OpenWUfBAlerts" Content="View selected device's alerts" Visibility="Collapsed" IsEnabled="False"
+                            AutomationProperties.Name="View selected device's alerts" ToolTip="Select cells in one WUfB device row. Uses already retrieved data; no new query."/>
+                    <Button Name="OpenCloudPcHistory" Content="Load Cloud PC connection history..." Visibility="Collapsed" IsEnabled="False"
+                            ToolTip="Select cells in one Cloud PC row to load its last seven days of connection history from Graph beta."
+                            AutomationProperties.HelpText="Select cells in one Cloud PC row. Loads seven days of connection history using existing Graph consent."/>
+                    <Button Name="OpenFailureInvestigation" Content="Open app diagnostics setup..." Visibility="Collapsed" IsEnabled="False"
+                            ToolTipService.ShowOnDisabled="True"
+                            ToolTip="Select cells in one failure row with a managed device ID. This opens the prefilled form; choose Run report there."
+                            AutomationProperties.HelpText="Select cells in one failure row with a managed device ID. Opens the prefilled form without running it."/>
+                    <StackPanel Name="ErrorCodeActions" Orientation="Horizontal" Visibility="Collapsed">
+                      <Button Name="CopyErrorCode" Content="Copy code" IsEnabled="False" ToolTipService.ShowOnDisabled="True"
+                              ToolTip="Select one row with a numeric error code to copy its normalized hex value."/>
+                      <Button Name="OpenErrorCodeReference" Content="Open Microsoft reference" IsEnabled="False" ToolTipService.ShowOnDisabled="True"
+                              ToolTip="Select one error-code row to open its Microsoft Learn reference."/>
+                      <Button Name="SearchErrorCode" Content="Search this code" IsEnabled="False" ToolTipService.ShowOnDisabled="True"
+                              ToolTip="Select one row with a numeric error code. Only its normalized hex value is sent to the search engine."/>
+                    </StackPanel>
+                  </WrapPanel>
+                  <TextBlock DockPanel.Dock="Bottom" Text="Select cells with Shift for a range or Ctrl for individual cells, then press Ctrl+C to copy without headers. Read script output for warnings and action outcomes." FontSize="{StaticResource Font.Size.Secondary}" Foreground="{DynamicResource Brush.Text.Muted}" TextWrapping="Wrap" Margin="0,10,0,0"/>
+                  <DataGrid Name="ResultsGrid" SelectionUnit="Cell" SelectionMode="Extended" ClipboardCopyMode="ExcludeHeader" AutomationProperties.Name="Report data"/>
+                </DockPanel>
+              </TabItem>
+              <TabItem Header="Visual summary" Name="ReportVisualTab" Visibility="Collapsed">
+                <DockPanel>
+                  <StackPanel DockPanel.Dock="Top" Margin="{DynamicResource Spacing.Panel.Margin}">
+                    <Label Content="_Report to visualize" Target="{Binding ElementName=ReportVisualSelector}" Foreground="{DynamicResource Brush.Text.Primary}"/>
+                    <Grid>
+                      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                      <ComboBox Name="ReportVisualSelector" DisplayMemberPath="Title" AutomationProperties.Name="Report to visualize" Margin="{DynamicResource Spacing.Button.Margin}"/>
+                      <StackPanel Grid.Column="1" IsEnabled="{Binding IsEnabled, ElementName=WorkflowList}">
+                        <Button Name="ExportReportVisualButton" Content="Export _PNG..." IsEnabled="False" Margin="0"
+                                ToolTip="Save all charts in the selected visual summary, including charts below the visible area."
+                                AutomationProperties.HelpText="Exports the selected visual summary as a PNG image, with titles, labels and data-coverage notes."/>
+                      </StackPanel>
+                    </Grid>
+                    <TextBlock Text="Charts summarize retrieved report data; paging and report scope can limit coverage. Grid filters do not change them."
+                               TextWrapping="Wrap" Foreground="{DynamicResource Brush.Text.Secondary}" Margin="{DynamicResource Spacing.Hint.Margin}"/>
+                  </StackPanel>
+                  <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Name="ReportVisualPanel"/>
+                  </ScrollViewer>
+                </DockPanel>
+              </TabItem>
+              <TabItem Header="Saved reports">
+                <DockPanel>
+                  <TextBlock DockPanel.Dock="Top" Text="Generated report files and exported visual summary images." Margin="0,0,0,12" TextWrapping="Wrap"/>
+                  <Button Name="OpenArtifactButton" DockPanel.Dock="Bottom" Content="_Open selected report" HorizontalAlignment="Right" Margin="0,12,0,0"/>
+                  <ListBox Name="Artifacts" DisplayMemberPath="Display" AutomationProperties.Name="Generated reports" BorderBrush="{DynamicResource Brush.Border.Divider}"/>
+                </DockPanel>
+              </TabItem>
+              <TabItem Header="Remote workspace" Name="RemoteTab" Visibility="Collapsed">
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="3*" MinHeight="140"/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition Height="2*" MinHeight="128"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+                  <TextBlock Name="RemoteStatus" Text="Disconnected. Commands cannot run locally." TextWrapping="Wrap" Margin="0,0,0,6"
+                             AutomationProperties.Name="Remote session status" AutomationProperties.LiveSetting="Polite"/>
+                  <DockPanel Grid.Row="1" Background="{DynamicResource Brush.Console.Background}">
+                    <TextBlock Name="RemoteBusyIndicator" DockPanel.Dock="Bottom" Visibility="Collapsed" FontFamily="Consolas" Foreground="{DynamicResource Brush.Console.Text}"
+                               Padding="{StaticResource Padding.Control}" AutomationProperties.Name="Remote operation running indicator"/>
+                    <TextBox Name="RemoteOutput" Style="{StaticResource ConsoleOutput}" AutomationProperties.Name="Remote PowerShell output"/>
+                  </DockPanel>
+                  <GridSplitter Grid.Row="2" Height="6" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" Background="{DynamicResource Brush.Border.Default}"
+                                ToolTip="Drag to resize remote output and command editor" AutomationProperties.Name="Resize remote output and command editor"/>
+                  <DockPanel Grid.Row="3">
+                  <StackPanel DockPanel.Dock="Top">
+                    <ComboBox Name="RemoteCommandPicker" DisplayMemberPath="Name" MaxDropDownHeight="320" IsTextSearchEnabled="True"
+                              ToolTip="Select a command to replace the text below. Review or edit it, then click Run on endpoint. Selection never runs it."
+                              AutomationProperties.Name="Saved remote commands"/>
+                    <ScrollViewer MaxHeight="32" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,4,0,4">
+                    <TextBlock Name="RemoteCommandDescription" Text="Choose a saved command or type your own. Review the text before clicking Run on endpoint."
+                               TextWrapping="Wrap" Foreground="{DynamicResource Brush.Text.Muted}" FontSize="{StaticResource Font.Size.Secondary}"/>
+                    </ScrollViewer>
+                  </StackPanel>
+                  <TextBox Name="RemoteCommand" AcceptsReturn="True" MinHeight="{StaticResource Control.Height.Multiline}" VerticalContentAlignment="Top"
+                           VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="{StaticResource Padding.Control}"
+                          FontFamily="{StaticResource Font.Family.Monospace}" AutomationProperties.Name="Remote PowerShell command"/>
+                  </DockPanel>
+                    <WrapPanel Grid.Row="4" Margin="0,8,0,0"><Button Name="SendCommandButton" Style="{StaticResource PrimaryButton}" Content="Run on _endpoint" IsEnabled="False"/>
+                      <Button Name="DisconnectButton" Content="Disconnect sessio_n" IsEnabled="False"/>
+                      <Button Name="SaveRemoteLogButton" Content="Save remote output..."/></WrapPanel>
+                </Grid>
+              </TabItem>
+            </TabControl>
+          </Grid>
+        </TabItem>
+      </TabControl>
+      <Border Grid.Row="2" BorderBrush="{DynamicResource Brush.Border.Divider}" BorderThickness="0,1,0,0" Padding="0,8" Margin="0,8,0,0">
+        <DockPanel>
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+            <Button Name="CancelButton" Content="_Stop" IsEnabled="False"/>
+            <Button Name="BackToRollout" Content="Back to _rollout" Visibility="Collapsed" Margin="{StaticResource Spacing.Button.Margin}"/>
+            <Button Name="RunButton" Content="_Run report" Margin="0">
+              <Button.Style><Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                <Style.Triggers>
+                  <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                      <Condition Binding="{Binding IsSelected, ElementName=RemoteTab}" Value="True"/>
+                      <Condition Binding="{Binding IsEnabled, ElementName=SendCommandButton}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Background" Value="{DynamicResource Brush.Background.Elevated}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource Brush.Text.Button}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Default}"/>
+                  </MultiDataTrigger>
+                </Style.Triggers>
+              </Style></Button.Style>
+            </Button>
+          </StackPanel>
+          <TextBlock Name="ExecutionHint" Text="Connect on Home before running Graph tasks." TextWrapping="Wrap" Foreground="{DynamicResource Brush.Text.Muted}" VerticalAlignment="Center" Margin="0,0,18,0"
+                     AutomationProperties.Name="Execution guidance" AutomationProperties.LiveSetting="Polite"/>
+        </DockPanel>
+      </Border>
+      <StackPanel Grid.Row="3">
+        <ProgressBar Name="Progress" Height="{StaticResource Control.Height.Progress}" Minimum="0" Maximum="100" Foreground="{DynamicResource Brush.Accent}" Background="{DynamicResource Brush.Border.Subtle}" BorderThickness="0"
+                     AutomationProperties.Name="Task progress"/>
+        <TextBlock Name="Status" Text="Select a task. Sign-in and permissions not verified." Margin="0,8,0,5" FontSize="{StaticResource Font.Size.Secondary}" TextWrapping="Wrap"
+                   AutomationProperties.Name="Task status" AutomationProperties.LiveSetting="Polite"/>
+        <Expander Header="Connection &amp; script details" FontSize="{StaticResource Font.Size.Caption}" Margin="0" Padding="0">
+          <StackPanel><TextBlock Name="ContextLabel" Text="Sign-in and permissions not verified. Connect or check on Home." TextWrapping="Wrap"/><TextBlock Name="ScriptPath" TextWrapping="Wrap" Margin="0,4,0,0"/></StackPanel>
+        </Expander>
+      </StackPanel>
+    </Grid>
+  </Grid>
+</Window>
